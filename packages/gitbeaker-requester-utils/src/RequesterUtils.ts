@@ -18,7 +18,7 @@ export interface RequesterType {
 
 export type DefaultRequestService = Pick<
   BaseService,
-  'headers' | 'requestTimeout' | 'url' | 'rejectUnauthorized'
+  'headers' | 'requestTimeout' | 'url' | 'rejectUnauthorized' | 'additionalBody'
 >;
 
 export type DefaultRequestOptions = {
@@ -50,16 +50,17 @@ export function defaultRequest(
   service: DefaultRequestService,
   { body, query, sudo, method = 'get' }: DefaultRequestOptions = {},
 ): DefaultRequestReturn {
-  const { headers } = service;
+  const { headers, additionalBody } = service;
   let bod: FormData | string;
 
   if (sudo) headers.sudo = sudo;
 
   // FIXME: Not the best comparison, but...it will have to do for now.
   if (typeof body === 'object' && body.constructor.name !== 'FormData') {
-    bod = JSON.stringify(decamelizeKeys(body));
+    bod = JSON.stringify(decamelizeKeys({ ...body, ...additionalBody }));
     headers['content-type'] = 'application/json';
   } else {
+    /** TODO - what do I do here with the additionalBody? */
     bod = body as FormData;
   }
 
