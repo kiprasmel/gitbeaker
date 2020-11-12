@@ -60,7 +60,8 @@ export function defaultRequest(
     bod = JSON.stringify(decamelizeKeys({ ...body, ...additionalBody }));
     headers['content-type'] = 'application/json';
   } else {
-    bod = { ...body, ...additionalBody } as FormData;
+    /** TODO - what do I do here with the additionalBody? */
+    bod = body as FormData;
   }
 
   return {
