@@ -111,6 +111,7 @@ export class BaseService {
     if (sudo) this.headers.Sudo = `${sudo}`;
 
     // Set requester instance using this information
+    // @ts-ignore
     this.requester = requesterFn({ ...this });
   }
 }
